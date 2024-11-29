@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/types';
 
 // 模拟的聊天消息数据
 const mockMessages = [
@@ -33,6 +35,13 @@ const mockMessages = [
     timestamp: '10:32 AM',
   },
 ];
+
+// 定义导航属性类型
+type ChatScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Chat'>;
+
+interface ChatScreenProps {
+  navigation: ChatScreenNavigationProp;
+}
 
 // 消息气泡组件
 const MessageBubble = ({ message, type, timestamp }: {
@@ -59,12 +68,16 @@ const MessageBubble = ({ message, type, timestamp }: {
   </View>
 );
 
-const ChatScreen = () => {
+// 聊天界面组件
+const ChatScreen = ({ navigation }: ChatScreenProps) => {
   return (
     <SafeAreaView style={styles.container}>
       {/* 顶部导航栏 */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
           <Ionicons name="chevron-back" size={28} color="#FF5A5F" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Tokyo Trip Plan</Text>
