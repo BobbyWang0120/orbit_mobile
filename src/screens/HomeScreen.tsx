@@ -7,8 +7,24 @@ import { RootStackParamList } from '../navigation/types';
 // 获取屏幕宽度用于计算卡片宽度
 const { width } = Dimensions.get('window');
 
+// 定义导航属性类型
+type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
+
+interface HomeScreenProps {
+  navigation: HomeScreenNavigationProp;
+}
+
+// 定义对话数据类型
+interface Conversation {
+  id: string;
+  title: string;
+  lastMessage: string;
+  date: string;
+  destination: string;
+}
+
 // 模拟的对话数据
-const mockConversations = [
+const mockConversations: Conversation[] = [
   {
     id: '1',
     title: 'Tokyo Adventure',
@@ -32,19 +48,12 @@ const mockConversations = [
   },
 ];
 
-// 定义导航属性类型
-type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
-
-interface HomeScreenProps {
-  navigation: HomeScreenNavigationProp;
-}
-
 // 对话列表项组件
-const ConversationItem = ({ title, lastMessage, date, destination }: {
-  title: string;
-  lastMessage: string;
-  date: string;
-  destination: string;
+const ConversationItem: React.FC<Conversation> = ({ 
+  title, 
+  lastMessage, 
+  date, 
+  destination 
 }) => (
   <TouchableOpacity style={styles.conversationItem}>
     <View style={styles.cardIcon}>
@@ -62,7 +71,7 @@ const ConversationItem = ({ title, lastMessage, date, destination }: {
 );
 
 // 主页面组件
-const HomeScreen = ({ navigation }: HomeScreenProps) => {
+const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -73,12 +82,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
         data={mockConversations}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <ConversationItem
-            title={item.title}
-            lastMessage={item.lastMessage}
-            date={item.date}
-            destination={item.destination}
-          />
+          <ConversationItem {...item} />
         )}
         style={styles.list}
         contentContainerStyle={styles.listContent}

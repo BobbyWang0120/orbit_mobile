@@ -14,8 +14,23 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
 
+// 定义导航属性类型
+type ChatScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Chat'>;
+
+interface ChatScreenProps {
+  navigation: ChatScreenNavigationProp;
+}
+
+// 定义消息数据类型
+interface Message {
+  id: string;
+  type: 'user' | 'ai';
+  message: string;
+  timestamp: string;
+}
+
 // 模拟的聊天消息数据
-const mockMessages = [
+const mockMessages: Message[] = [
   {
     id: '1',
     type: 'user',
@@ -36,19 +51,8 @@ const mockMessages = [
   },
 ];
 
-// 定义导航属性类型
-type ChatScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Chat'>;
-
-interface ChatScreenProps {
-  navigation: ChatScreenNavigationProp;
-}
-
 // 消息气泡组件
-const MessageBubble = ({ message, type, timestamp }: {
-  message: string;
-  type: 'user' | 'ai';
-  timestamp: string;
-}) => (
+const MessageBubble: React.FC<Message> = ({ message, type, timestamp }) => (
   <View style={[styles.messageContainer, type === 'user' ? styles.userMessage : styles.aiMessage]}>
     {type === 'ai' && (
       <View style={styles.avatarContainer}>
@@ -69,7 +73,7 @@ const MessageBubble = ({ message, type, timestamp }: {
 );
 
 // 聊天界面组件
-const ChatScreen = ({ navigation }: ChatScreenProps) => {
+const ChatScreen: React.FC<ChatScreenProps> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       {/* 顶部导航栏 */}
@@ -91,11 +95,7 @@ const ChatScreen = ({ navigation }: ChatScreenProps) => {
         data={mockMessages}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <MessageBubble
-            message={item.message}
-            type={item.type}
-            timestamp={item.timestamp}
-          />
+          <MessageBubble {...item} />
         )}
         contentContainerStyle={styles.messagesList}
       />
