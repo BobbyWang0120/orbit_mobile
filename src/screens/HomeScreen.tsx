@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/types';
 
 // 获取屏幕宽度用于计算卡片宽度
 const { width } = Dimensions.get('window');
@@ -30,6 +32,13 @@ const mockConversations = [
   },
 ];
 
+// 定义导航属性类型
+type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
+
+interface HomeScreenProps {
+  navigation: HomeScreenNavigationProp;
+}
+
 // 对话列表项组件
 const ConversationItem = ({ title, lastMessage, date, destination }: {
   title: string;
@@ -53,7 +62,7 @@ const ConversationItem = ({ title, lastMessage, date, destination }: {
 );
 
 // 主页面组件
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }: HomeScreenProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -75,7 +84,10 @@ const HomeScreen = () => {
         contentContainerStyle={styles.listContent}
       />
 
-      <TouchableOpacity style={styles.newChatButton}>
+      <TouchableOpacity 
+        style={styles.newChatButton}
+        onPress={() => navigation.navigate('Chat')}
+      >
         <Ionicons name="add" size={24} color="white" />
         <Text style={styles.newChatButtonText}>New Plan</Text>
       </TouchableOpacity>
