@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions } from '
 import { Ionicons } from '@expo/vector-icons';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
+import Header from '../components/Header';
 
 // 获取屏幕宽度用于计算卡片宽度
 const { width } = Dimensions.get('window');
@@ -74,9 +75,7 @@ const ConversationItem: React.FC<Conversation> = ({
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Orbit</Text>
-      </View>
+      <Header title="Orbit" />
       
       <FlatList
         data={mockConversations}
@@ -104,20 +103,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f8f8',
-  },
-  header: {
-    paddingTop: 60,
-    paddingBottom: 20,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#FF5A5F',
-    letterSpacing: 0.5,
   },
   list: {
     flex: 1,

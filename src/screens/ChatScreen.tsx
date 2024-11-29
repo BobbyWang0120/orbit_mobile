@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
+import Header from '../components/Header';
 
 // 定义导航属性类型
 type ChatScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Chat'>;
@@ -75,20 +76,13 @@ const MessageBubble: React.FC<Message> = ({ message, type, timestamp }) => (
 // 聊天界面组件
 const ChatScreen: React.FC<ChatScreenProps> = ({ navigation }) => {
   return (
-    <SafeAreaView style={styles.container}>
-      {/* 顶部导航栏 */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="chevron-back" size={28} color="#FF5A5F" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Tokyo Trip Plan</Text>
-        <TouchableOpacity style={styles.menuButton}>
-          <Ionicons name="ellipsis-horizontal" size={24} color="#666" />
-        </TouchableOpacity>
-      </View>
+    <View style={styles.container}>
+      <Header 
+        title="Tokyo Trip Plan" 
+        showBack 
+        showMenu
+        onBackPress={() => navigation.goBack()}
+      />
 
       {/* 聊天消息列表 */}
       <FlatList
@@ -117,7 +111,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -125,27 +119,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f8f8',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  backButton: {
-    padding: 4,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#222',
-  },
-  menuButton: {
-    padding: 4,
   },
   messagesList: {
     paddingHorizontal: 16,
