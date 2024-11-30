@@ -73,6 +73,14 @@ const ConversationItem: React.FC<Conversation> = ({
 
 // 主页面组件
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
+  const handleNewPlan = () => {
+    navigation.navigate('Chat', { title: 'New Plan' });
+  };
+
+  const handlePlanPress = (title: string) => {
+    navigation.navigate('Chat', { title });
+  };
+
   return (
     <View style={styles.container}>
       <Header title="Orbit" />
@@ -81,7 +89,22 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         data={mockConversations}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <ConversationItem {...item} />
+          <TouchableOpacity 
+            style={styles.conversationItem}
+            onPress={() => handlePlanPress(item.title)}
+          >
+            <View style={styles.cardIcon}>
+              <Ionicons name="map-outline" size={24} color="#FF5A5F" />
+            </View>
+            <View style={styles.conversationContent}>
+              <Text style={styles.conversationTitle}>{item.title}</Text>
+              <Text style={styles.destinationText}>{item.destination}</Text>
+              <Text style={styles.conversationMessage} numberOfLines={1}>
+                {item.lastMessage}
+              </Text>
+              <Text style={styles.conversationDate}>{item.date}</Text>
+            </View>
+          </TouchableOpacity>
         )}
         style={styles.list}
         contentContainerStyle={styles.listContent}
@@ -89,7 +112,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 
       <TouchableOpacity 
         style={styles.newChatButton}
-        onPress={() => navigation.navigate('Chat')}
+        onPress={handleNewPlan}
       >
         <Ionicons name="add" size={24} color="white" />
         <Text style={styles.newChatButtonText}>New Plan</Text>

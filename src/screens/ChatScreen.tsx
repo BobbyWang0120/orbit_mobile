@@ -13,6 +13,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/types';
 import Header from '../components/Header';
 import ChatInput from '../components/ChatInput';
@@ -20,9 +21,11 @@ import MessageBubble from '../components/MessageBubble';
 
 // 定义导航属性类型
 type ChatScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Chat'>;
+type ChatScreenRouteProp = RouteProp<RootStackParamList, 'Chat'>;
 
 interface ChatScreenProps {
   navigation: ChatScreenNavigationProp;
+  route: ChatScreenRouteProp;
 }
 
 // 定义消息数据类型
@@ -52,8 +55,10 @@ const mockMessages: Message[] = [
 ];
 
 // 聊天界面组件
-const ChatScreen: React.FC<ChatScreenProps> = ({ navigation }) => {
+const ChatScreen: React.FC<ChatScreenProps> = ({ navigation, route }) => {
+  const { title } = route.params;
   const insets = useSafeAreaInsets();
+
   const handleSendMessage = (message: string) => {
     // 这里处理发送消息的逻辑
     console.log('Sending message:', message);
@@ -62,7 +67,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Header 
-        title="Tokyo Trip Plan" 
+        title={title}
         showBack 
         showMenu
         onBackPress={() => navigation.goBack()}
