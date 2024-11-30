@@ -8,12 +8,14 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
 import Header from '../components/Header';
+import ChatInput from '../components/ChatInput';
 
 // 定义导航属性类型
 type ChatScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Chat'>;
@@ -75,6 +77,12 @@ const MessageBubble: React.FC<Message> = ({ message, type, timestamp }) => (
 
 // 聊天界面组件
 const ChatScreen: React.FC<ChatScreenProps> = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
+  const handleSendMessage = (message: string) => {
+    // 这里处理发送消息的逻辑
+    console.log('Sending message:', message);
+  };
+
   return (
     <View style={styles.container}>
       <Header 
@@ -91,26 +99,14 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ navigation }) => {
         renderItem={({ item }) => (
           <MessageBubble {...item} />
         )}
-        contentContainerStyle={styles.messagesList}
+        contentContainerStyle={[
+          styles.messagesList,
+          { paddingBottom: 16 }
+        ]}
       />
 
       {/* 底部输入框 */}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.inputContainer}
-      >
-        <View style={styles.inputWrapper}>
-          <TextInput
-            style={styles.input}
-            placeholder="Type your message..."
-            multiline
-            placeholderTextColor="#999"
-          />
-          <TouchableOpacity style={styles.sendButton}>
-            <Ionicons name="send" size={24} color="#FF5A5F" />
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
+      <ChatInput onSendMessage={handleSendMessage} />
     </View>
   );
 };
@@ -122,7 +118,39 @@ const styles = StyleSheet.create({
   },
   messagesList: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingTop: 8,
+  },
+  inputContainer: {
+    borderTopWidth: 1,
+    borderTopColor: '#f0f0f0',
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+    paddingTop: 16,
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f8f8f8',
+    borderRadius: 24,
+    paddingHorizontal: 16,
+    minHeight: 44,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    lineHeight: 20,
+    paddingVertical: 10,
+    color: '#222',
+    marginRight: 8,
+  },
+  sendButton: {
+    width: 32,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sendButtonDisabled: {
+    opacity: 0.5,
   },
   messageContainer: {
     flexDirection: 'row',
@@ -173,30 +201,6 @@ const styles = StyleSheet.create({
     color: '#999',
     marginTop: 4,
     alignSelf: 'flex-end',
-  },
-  inputContainer: {
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
-    padding: 12,
-  },
-  inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f8f8f8',
-    borderRadius: 24,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    maxHeight: 100,
-    color: '#222',
-  },
-  sendButton: {
-    marginLeft: 12,
-    padding: 4,
   },
 });
 
